@@ -4,6 +4,7 @@ import br.com.natan.api.domain.User;
 import br.com.natan.api.domain.dto.UserDTO;
 import br.com.natan.api.repositories.UserRepository;
 import br.com.natan.api.services.UserService;
+import br.com.natan.api.services.exceptions.DataIntegrityViolationException;
 import br.com.natan.api.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, User.class));
+    }
+
+    private void findByEmail(UserDTO obj){
+        Optional<User> user = repository.findByEmail(obj.getEmail());
+        if(user.isPresent())
+            throw new DataIntegrityViolationException("Email já cadastrado no sistema!");
     }
 
 }
