@@ -3,6 +3,7 @@ package br.com.natan.api.services.impl;
 import br.com.natan.api.domain.User;
 import br.com.natan.api.domain.dto.UserDTO;
 import br.com.natan.api.repositories.UserRepository;
+import br.com.natan.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -55,6 +56,18 @@ class UserServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não Encontrado!"));
+
+        try{
+            service.findById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não Encontrado!", ex.getMessage());
+        }
     }
 
     @Test
