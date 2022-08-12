@@ -31,6 +31,7 @@ class UserServiceImplTest {
     public static final int INDEX = 0;
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não Encontrado!";
     public static final String EMAIL_JA_CADASTRADO_NO_SISTEMA = "Email já cadastrado no sistema!";
+
     @InjectMocks
     private UserServiceImpl service;
 
