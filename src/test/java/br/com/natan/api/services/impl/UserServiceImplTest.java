@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -30,6 +30,7 @@ class UserServiceImplTest {
     public static final String PASSWORD = "123456";
     public static final int INDEX = 0;
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não Encontrado!";
+    public static final String EMAIL_JA_CADASTRADO_NO_SISTEMA = "Email já cadastrado no sistema!";
     @InjectMocks
     private UserServiceImpl service;
 
@@ -113,7 +114,7 @@ class UserServiceImplTest {
             service.create(userDTO);
         } catch (Exception ex){
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
-            assertEquals("Email já cadastrado no sistema!", ex.getMessage());
+            assertEquals(EMAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
         }
     }
 
@@ -132,7 +133,25 @@ class UserServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void whenUpdateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+
+        try{
+            optionalUser.get().setId(2);
+            service.update(userDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(EMAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
+    }
+
+    @Test
+    void deleteWithSucess() {
+        when(repository.findById(anyInt())).thenReturn(optionalUser);
+        doNothing().when(repository).deleteById(anyInt());
+
+        service.delete(ID);
+        verify(repository, times(1)).deleteById(anyInt());
     }
 
     private void startUser(){
