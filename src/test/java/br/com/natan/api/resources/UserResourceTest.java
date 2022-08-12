@@ -65,6 +65,7 @@ class UserResourceTest {
         assertEquals(ID, response.getBody().getId());
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
+        assertEquals(PASSWORD, response.getBody().getPassword());
     }
 
     @Test
@@ -84,6 +85,7 @@ class UserResourceTest {
         assertEquals(ID, response.getBody().get(INDEX).getId());
         assertEquals(NAME, response.getBody().get(INDEX).getName());
         assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
+        assertEquals(PASSWORD, response.getBody().get(INDEX).getPassword());
     }
 
     @Test
@@ -113,6 +115,7 @@ class UserResourceTest {
         assertEquals(ID, response.getBody().getId());
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
+        assertEquals(PASSWORD, response.getBody().getPassword());
     }
 
     @Test
